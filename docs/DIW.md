@@ -108,7 +108,7 @@ Macierz obejmuje kompetencje kluczowe dla tego projektu. Skala: Posiada, Posiada
 | Programowanie w Pythonie | | | |
 | Przetwarzanie obrazu i wideo (OpenCV, ffmpeg) | | | |
 | Modele AI do wykrywania obiektów (twarze, tablice, tekst) | | | |
-| Rozpoznawanie mowy i przetwarzanie dźwięku | | | |
+| Programowe rozpoznawanie mowy (zamiana mowy na tekst, np. Whisper) i obróbka dźwięku | | | |
 | Transmisja strumieniowa (RTSP) | | | |
 | Aplikacje webowe (frontend, backend) | | | |
 | Bazy danych (SQL) | | | |
