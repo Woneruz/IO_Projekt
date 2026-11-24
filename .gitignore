@@ -1,0 +1,134 @@
+# ===== Asystenci AI i ich pliki konfiguracyjne =====
+# Claude / Claude Code
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+.claude.json
+.mcp.json
+# Cursor
+.cursor/
+.cursorrules
+.cursorignore
+.cursorindexingignore
+# GitHub Copilot
+.copilot/
+.github/copilot-instructions.md
+.github/instructions/
+.github/prompts/
+# OpenAI Codex / agenci
+.codex/
+AGENTS.md
+AGENTS.override.md
+# Google Gemini
+.gemini/
+GEMINI.md
+# JetBrains AI / Junie
+.junie/
+.aiassistant/
+.aiignore
+# Windsurf / Codeium
+.windsurf/
+.windsurfrules
+.codeium/
+# Aider
+.aider*
+# Continue
+.continue/
+# Cline / Roo Code
+.cline/
+.clinerules
+.clinerules/
+.roo/
+.roomodes
+# Tabnine, Amazon Q, Sourcegraph Cody, Zed, Kiro
+.tabnine/
+.tabnine_root
+.amazonq/
+.aws/amazonq/
+.cody/
+.zed/
+.kiro/
+# Ogólne notatki i prompty dla AI
+.ai/
+.prompts/
+*.prompt.md
+.specstory/
+.history/
+
+# ===== Zmienne środowiskowe i sekrety =====
+.env
+.env.*
+*.env
+!.env.example
+.envrc
+.secrets
+secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+id_rsa*
+id_ed25519*
+credentials.json
+service-account*.json
+*.secret
+*.token
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.python-version
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# ===== Node / frontend =====
+node_modules/
+.npm/
+.next/
+.vite/
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# ===== IDE =====
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+
+# ===== System =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Dane i modele (duże pliki, nagrania z danymi osobowymi) =====
+data/
+uploads/
+recordings/
+models/
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.mp4
+*.mov
+*.mp3
+*.db
+*.sqlite3
+
+# ===== Pliki tymczasowe =====
+*.tmp
+*.bak
