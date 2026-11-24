@@ -642,8 +642,11 @@ Architektura powinna umożliwić rozwój bez przebudowy. Przewidywane kierunki z
 | Bezpieczeństwo | Biblioteka cryptography (AES-256-GCM), TOTP (np. pyotp) |
 | Baza danych | PostgreSQL |
 | Wdrożenie | Docker Compose na serwerze klienta z kartą graficzną NVIDIA |
+| Środowisko deweloperskie | Docker Compose na komputerach bez karty graficznej NVIDIA, mniejsze warianty modeli uruchamiane na procesorze |
 
 Uzasadnienie: Python ma najszerszy wybór gotowych modeli i bibliotek do przetwarzania obrazu i mowy, które można uruchomić lokalnie, bez wysyłania danych do usług zewnętrznych (NF-08). ffmpeg obsługuje wszystkie wymagane formaty i kodeki. FastAPI pozwala szybko zbudować API z walidacją danych, a React ułatwia budowę podglądu z osią czasu i edycją masek. PostgreSQL zapewnia trwałe przechowywanie kont, map wykryć i statystyk. Docker ułatwia identyczne uruchomienie u każdego członka zespołu i u klienta.
+
+**Środowisko deweloperskie.** System jest rozwijany na typowych komputerach (Windows, Linux, macOS) bez kart graficznych NVIDIA. Całość uruchamia się poleceniem `docker compose up`, a obrazy Docker są budowane dla architektur x86-64 i ARM64. W środowisku deweloperskim modele działają na procesorze w mniejszych wariantach (np. faster-whisper `small`, YOLO w wersji nano), a materiały testowe to krótkie pliki 720p i 1080p. Wariant modeli i urządzenie obliczeniowe (procesor lub karta graficzna) wybiera się w pliku konfiguracyjnym, bez zmian w kodzie. Wymagania wydajnościowe, w szczególności transmisja 4K z opóźnieniem do 15 s (NF-05), są weryfikowane wyłącznie na docelowym serwerze z kartą graficzną.
 
 ---
 
