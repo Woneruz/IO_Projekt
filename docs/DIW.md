@@ -105,17 +105,17 @@ Macierz obejmuje kompetencje kluczowe dla tego projektu. Skala: Posiada, Posiada
 
 | Kompetencje | Joanna Żupnik | Marcel Kuźma | Arkadiusz Baran |
 |---|---|---|---|
-| Programowanie w Pythonie | | | Posiada |
-| Przetwarzanie obrazu i wideo (OpenCV, ffmpeg) | | | Posiada |
-| Modele AI do wykrywania obiektów (twarze, tablice, tekst) | | | Nie posiada |
-| Programowe rozpoznawanie mowy (zamiana mowy na tekst, np. Whisper) i obróbka dźwięku | | | Posiada |
-| Transmisja strumieniowa (RTSP) | | | Posiada |
-| Aplikacje webowe (frontend, backend) | | | Posiada |
-| Bazy danych (SQL) | | | Posiada |
-| Bezpieczeństwo i kryptografia (AES, 2FA) | | | Posiada |
-| Dostępność interfejsu (WCAG) | | | Posiada |
-| Znajomość UML | | | Posiada |
-| Testowanie oprogramowania | | | Posiada |
+| Programowanie w Pythonie | | Posiada | Posiada |
+| Przetwarzanie obrazu i wideo (OpenCV, ffmpeg) | | Nie posiada | Posiada |
+| Modele AI do wykrywania obiektów (twarze, tablice, tekst) | | Nie posiada | Nie posiada |
+| Programowe rozpoznawanie mowy (zamiana mowy na tekst, np. Whisper) i obróbka dźwięku | | Nie posiada | Posiada |
+| Transmisja strumieniowa (RTSP) | | Posiada (podstawy) | Posiada |
+| Aplikacje webowe (frontend, backend) | | Posiada (podstawy) | Posiada |
+| Bazy danych (SQL) | | Posiada | Posiada |
+| Bezpieczeństwo i kryptografia (AES, 2FA) | | Posiada | Posiada |
+| Dostępność interfejsu (WCAG) | | Posiada | Posiada |
+| Znajomość UML | | Posiada | Posiada |
+| Testowanie oprogramowania | | Posiada | Posiada |
 
 ### 2.2. Proponowany podział ról
 
