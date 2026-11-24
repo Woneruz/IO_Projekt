@@ -53,14 +53,14 @@ Dodatkowe oczekiwania klienta:
 
 ### 1.3. Zakres systemu
 
-System jest aplikacją webową z interfejsem w języku polskim, działającą na serwerze w infrastrukturze klienta (założenie, rozdział 1.4). Użytkownik loguje się z uwierzytelnianiem dwuskładnikowym (2FA), wgrywa plik (MP4, MOV lub MP3) albo wskazuje transmisję na żywo i wybiera, co ma zostać zanonimizowane: twarze, tekst w kadrze lub głos. Następnie przegląda wynik, w razie potrzeby go poprawia i zatwierdza.
+System jest aplikacją webową z interfejsem w języku polskim, działającą na serwerze w infrastrukturze klienta (założenie, rozdział 1.4). Użytkownik loguje się z uwierzytelnianiem dwuskładnikowym (2FA), wgrywa plik (MP4, MOV lub MP3) albo wskazuje transmisję na żywo i wybiera, co ma zostać zanonimizowane: twarze, tekst w kadrze lub głos. Następnie przegląda wynik, w razie potrzeby go poprawia i zatwierdza. Transmisje na żywo są anonimizowane w pełni automatycznie, bez udziału redaktora.
 
 System:
 
 - wykrywa i śledzi twarze, tablice rejestracyjne i tekst w kadrze, a następnie je maskuje,
 - rozpoznaje mowę w języku polskim i angielskim, wykrywa wypowiadane dane osobowe i je usuwa,
 - modyfikuje głos wszystkich osób poza reporterem,
-- rozpoznaje reportera na podstawie zdjęć i nie anonimizuje go,
+- rozpoznaje reportera po twarzy (na podstawie zdjęć) i po głosie (na podstawie próbki nagrania) i nie anonimizuje go,
 - przechowuje oryginały zaszyfrowane algorytmem AES-256 i umożliwia ich kontrolowane odtworzenie (pseudonimizacja odwracalna),
 - usuwa dane po skonfigurowanym czasie retencji (od 5 s do 7 dni),
 - prezentuje statystyki dla pojedynczego pliku oraz globalne.
@@ -75,11 +75,11 @@ Część ustaleń z klientem była zwięzła. Tam, gdzie wymagała doprecyzowani
 |---|---|
 | Format aplikacji: dowolny (web, standalone) | Aplikacja webowa uruchamiana w przeglądarce, a przetwarzanie i przechowywanie danych odbywa się na serwerze w infrastrukturze klienta (on-premise). Uzasadnienie: z systemu korzysta kilku redaktorów pracujących na wspólnych materiałach, wykrywanie twarzy i rozpoznawanie mowy wymagają wydajnej karty graficznej tylko na serwerze, a nie na każdym komputerze, a standard WCAG 2.1 dotyczy wprost treści webowych. Decyzja zespołu. |
 | Wynik: plik(i), RTSP | Dla materiału z pliku wynikiem jest zanonimizowany plik w formacie wejściowym. System przyjmuje jeden lub wiele plików naraz (przetwarzanie wsadowe). Dla transmisji na żywo wynikiem jest zanonimizowany strumień RTSP. |
-| Transmisja: opóźnienie do 15 s | Czas od odebrania fragmentu obrazu i dźwięku ze źródła do wysłania jego zanonimizowanej wersji w strumieniu wyjściowym nie przekracza 15 s. W trybie na żywo redaktor nie zatwierdza materiału przed emisją; może obserwować podgląd i przerwać transmisję. **Do potwierdzenia.** |
+| Transmisja: opóźnienie do 15 s | Czas od odebrania fragmentu obrazu i dźwięku ze źródła do wysłania jego zanonimizowanej wersji w strumieniu wyjściowym nie przekracza 15 s. Transmisja jest anonimizowana w pełni automatycznie: ze względu na opóźnienie redaktor nie przegląda ani nie poprawia jej przed emisją. Kategorie anonimizacji i profil reportera ustawia się przed rozpoczęciem transmisji. |
 | Skuteczność: twarze 97%, tablice rejestracyjne 95%, tekst w kadrze 95%, WER 90% | Odsetek obiektów danego typu wykrytych i zamaskowanych na zestawie testowym. Dla mowy chodzi o skuteczność rozpoznawania co najmniej 90%, czyli wskaźnik WER (odsetek błędnie rozpoznanych słów) nie większy niż 10%. |
 | Tożsamości wszystkich osób poza reporterem | Anonimizowane są wszystkie wykryte osoby z wyjątkiem reportera. |
-| Reporter: identyfikacja za pomocą zdjęć | Przed przetwarzaniem użytkownik wgrywa zdjęcia referencyjne reportera (co najmniej jedno, en face). Twarz pasująca do zdjęć nie jest maskowana. |
-| Modyfikacja głosu (poza reporterem) | Głos pozostałych mówców jest zmieniany tak, aby nie dało się go rozpoznać. W nagraniach bez obrazu (MP3) system dzieli nagranie na mówców, a reportera wskazuje redaktor. **Do potwierdzenia.** |
+| Reporter: identyfikacja za pomocą zdjęć | Przed przetwarzaniem użytkownik wgrywa zdjęcia referencyjne reportera (co najmniej jedno, en face). Twarz pasująca do zdjęć nie jest maskowana. Zdjęcia razem z próbką głosu tworzą profil reportera zapisany w systemie. |
+| Modyfikacja głosu (poza reporterem) | Głos pozostałych mówców jest zmieniany tak, aby nie dało się go rozpoznać. Głos reportera system rozpoznaje automatycznie na podstawie próbki nagrania jego głosu, wgranej wcześniej do profilu reportera. Dzięki temu działa to także w transmisji na żywo, gdzie redaktor nie ma czasu na ręczne wskazanie mówcy, oraz w nagraniach bez obrazu (MP3). |
 | Pseudonimizacja odwracalna | Materiał wynikowy jest zamaskowany nieodwracalnie: z opublikowanego pliku nie da się odtworzyć tożsamości. Odwracalność zapewnia przechowywany osobno, zaszyfrowany oryginał, do którego dostęp ma wyłącznie osoba uprawniona. Spełnia to definicję pseudonimizacji z RODO (art. 4 pkt 5) [3] i jednocześnie wymaganie klienta o odporności na próby odtworzenia tożsamości. |
 | Szyfrowanie danych lokalnie (AES-256) | Wszystkie przechowywane dane (oryginały, wyniki, informacje o wykryciach, zdjęcia reportera) są zaszyfrowane algorytmem AES-256 na serwerze klienta. Dane nie są wysyłane do usług zewnętrznych, więc modele rozpoznawania obrazu i mowy działają lokalnie. **Do potwierdzenia.** |
 | Retencja danych: konfiguracja od 5 s do 7 dni | Czas przechowywania ustawia administrator i dotyczy on wszystkich danych w systemie. Po jego upływie system trwale usuwa oryginały, wyniki, informacje o wykryciach i klucze szyfrujące. Konsekwencja: po upływie retencji odtworzenie oryginału nie jest możliwe. |
@@ -122,7 +122,7 @@ Macierz obejmuje kompetencje kluczowe dla tego projektu. Skala: Posiada, Posiada
 | Rola | Zakres odpowiedzialności | Osoba |
 |---|---|---|
 | Obraz | Wykrywanie i śledzenie twarzy, tablic rejestracyjnych i tekstu, maskowanie, rozpoznawanie reportera | *do ustalenia* |
-| Dźwięk | Rozpoznawanie mowy, wykrywanie wypowiadanych danych osobowych, modyfikacja głosu | *do ustalenia* |
+| Dźwięk | Rozpoznawanie mowy, wykrywanie wypowiadanych danych osobowych, rozpoznawanie głosu reportera, modyfikacja głosu | *do ustalenia* |
 | Aplikacja i bezpieczeństwo | Interfejs (WCAG), logowanie 2FA, szyfrowanie, retencja, transmisja na żywo, statystyki | *do ustalenia* |
 | Testy i dokumentacja | Zestawy testowe, testy akceptacyjne, diagramy UML | *wspólnie* |
 
@@ -137,8 +137,8 @@ Zamówienie klienta nie wystarczało do rozpoczęcia prac. Nie określało wymag
 | Jakie informacje identyfikujące mają być usuwane? | Twarze, tekst w kadrze (w tym tablice rejestracyjne) i głos, czyli dane osobowe w rozumieniu RODO. | Kategorie: FACE, TXT, VOICE. |
 | Czy użytkownik wybiera, co ma być anonimizowane? | Tak, konfiguracja FACE, TXT, VOICE. | Wybór przed przetwarzaniem. |
 | Czyje tożsamości mają być ukryte? | Wszystkich osób poza reporterem. | |
-| Jak system rozpoznaje reportera? | Na podstawie zdjęć. | Liczba zdjęć: założenie (1.4). |
-| Czy głos ma być modyfikowany? | Tak, poza głosem reportera. | Nagrania audio: do potwierdzenia (1.4). |
+| Jak system rozpoznaje reportera? | Na podstawie zdjęć. | Liczba zdjęć i próbka głosu: założenie (1.4). |
+| Czy głos ma być modyfikowany? | Tak, poza głosem reportera. | Głos reportera rozpoznawany z zapamiętanej próbki, także na żywo (1.4). |
 | Jakiej skuteczności wymagacie? | Twarze 97%, tablice rejestracyjne 95%, tekst w kadrze 95%, rozpoznawanie mowy 90% (WER). | WER nie większy niż 10%. |
 | Czy maska ma podążać za obiektem? | Tak, śledzenie obiektu do maskowania. | |
 | Czy anonimizacja ma być odwracalna? | Tak, pseudonimizacja odwracalna. | Odwracalność przez zaszyfrowany oryginał (1.4). |
@@ -181,6 +181,8 @@ Zamówienie klienta nie wystarczało do rozpoczęcia prac. Nie określało wymag
 | Mapa wykryć | Zapis wszystkich wykryć materiału: kategoria, numer klatki, położenie, identyfikator ścieżki i informacja, czy obiekt jest reporterem. |
 | Reporter | Osoba prowadząca materiał, której tożsamość nie jest ukrywana. |
 | Zdjęcie referencyjne | Zdjęcie twarzy reportera wgrane do systemu w celu jego rozpoznania. |
+| Próbka głosu reportera | Nagranie wypowiedzi samego reportera, z którego system tworzy profil głosu służący do rozpoznania reportera w plikach i w transmisji na żywo. |
+| Profil reportera | Zapisane w systemie zdjęcia referencyjne i profil głosu reportera. |
 | Redaktor | Użytkownik, który wgrywa materiały, przegląda i poprawia wynik oraz zatwierdza go do wydania. |
 | Osoba uprawniona do odtworzenia | Użytkownik z uprawnieniem do odzyskania oryginalnego materiału. |
 | Administrator | Użytkownik zarządzający kontami, rolami i czasem retencji danych. |
@@ -212,7 +214,7 @@ Wymagania użytkownika opisują w języku naturalnym, co system ma robić. Są p
 | WU-02 | Redaktor wgrywa nagranie wideo lub audio i wybiera, co ma zostać zanonimizowane: twarze, tekst w kadrze, głos. |
 | WU-03 | System automatycznie wykrywa i maskuje twarze, tablice rejestracyjne i tekst widoczny w kadrze. |
 | WU-04 | System automatycznie usuwa z dźwięku wypowiadane dane osobowe i zmienia głos rozmówców. |
-| WU-05 | Tożsamość reportera nie jest ukrywana. System rozpoznaje reportera na podstawie zdjęć. |
+| WU-05 | Tożsamość reportera nie jest ukrywana. System rozpoznaje reportera na podstawie zdjęć i zapamiętanego głosu. |
 | WU-06 | Redaktor przegląda i poprawia wynik anonimizacji przed wydaniem materiału. |
 | WU-07 | System anonimizuje transmisje na żywo z niewielkim opóźnieniem. |
 | WU-08 | Osoba uprawniona może w kontrolowany sposób odzyskać oryginalny materiał. |
@@ -240,14 +242,14 @@ Wymagania systemowe precyzują wymagania użytkownika i są przeznaczone dla arc
 | WF-08 | Gdy wybrano TXT, system wykrywa tablice rejestracyjne i tekst widoczny w kadrze. | M | WU-03 |
 | WF-09 | System śledzi wykryte obiekty między klatkami. Maska podąża za obiektem także w klatkach, w których detektor chwilowo go nie wykrył. | M | WU-03 |
 | WF-10 | System maskuje wykryte obiekty nieodwracalnie (jednolite wypełnienie lub pikselizacja). | M | WU-03 |
-| WF-11 | Redaktor wgrywa zdjęcia referencyjne reportera. Twarz reportera nie jest maskowana, a wszystkie pozostałe wykryte twarze są maskowane. | M | WU-05 |
+| WF-11 | Redaktor wgrywa do profilu reportera zdjęcia referencyjne i próbkę głosu (MP3). Twarz reportera nie jest maskowana, a wszystkie pozostałe wykryte twarze są maskowane. | M | WU-05 |
 | WF-12 | Gdy wybrano VOICE, system rozpoznaje mowę w języku polskim i angielskim i tworzy transkrypcję z czasami słów. | M | WU-04 |
 | WF-13 | System wykrywa w transkrypcji wypowiadane dane osobowe i usuwa odpowiadające im fragmenty dźwięku (wyciszenie lub sygnał zastępczy). | M | WU-04 |
-| WF-14 | System dzieli nagranie na mówców i modyfikuje głos wszystkich mówców poza reporterem. | M | WU-04, WU-05 |
+| WF-14 | System dzieli nagranie na mówców, rozpoznaje głos reportera na podstawie próbki z profilu reportera i modyfikuje głos wszystkich pozostałych mówców. Działa to bez udziału redaktora, także w transmisji na żywo. | M | WU-04, WU-05 |
 | WF-15 | Redaktor ogląda wynik w podglądzie z zaznaczonymi maskami i usuniętymi fragmentami dźwięku. Może dodać, usunąć lub przesunąć maskę oraz przywrócić lub usunąć fragment dźwięku. | M | WU-06 |
 | WF-16 | Eksport materiału wynikowego jest możliwy dopiero po zatwierdzeniu przez redaktora. Wynik ma ten sam format, rozdzielczość i kodek co materiał źródłowy. | M | WU-06 |
 | WF-17 | System przyjmuje transmisję na żywo, anonimizuje ją zgodnie z wybranymi kategoriami i udostępnia wynik jako strumień RTSP. | M | WU-07 |
-| WF-18 | Podczas transmisji na żywo redaktor widzi podgląd strumienia wynikowego i może przerwać transmisję. | S | WU-07 |
+| WF-18 | Transmisja na żywo jest anonimizowana w pełni automatycznie, bez przeglądu przez redaktora. Kategorie anonimizacji i profil reportera wybiera się przed rozpoczęciem transmisji. | M | WU-07 |
 | WF-19 | System przechowuje oryginał osobno od materiału wynikowego, w postaci zaszyfrowanej. | M | WU-08 |
 | WF-20 | Osoba uprawniona do odtworzenia może pobrać oryginał materiału. Każde odtworzenie jest zapisywane w dzienniku zdarzeń (kto, kiedy, który materiał). Użytkownik bez tego uprawnienia nie ma dostępu do oryginałów. | M | WU-08 |
 | WF-21 | Administrator ustawia czas retencji w zakresie od 5 s do 7 dni. Po jego upływie system trwale usuwa wszystkie dane materiału: oryginał, wynik, mapę wykryć, transkrypcję i klucz szyfrujący. | M | WU-09 |
@@ -289,6 +291,7 @@ Wymagania niefunkcjonalne podzielono na produktowe, organizacyjne i zewnętrzne.
 | Plik audio (wejście) | MP3 | Do 30 min |
 | Transmisja na żywo (wejście) | Strumień RTSP *(założenie, do potwierdzenia)* | Od 720p do 4K |
 | Zdjęcia referencyjne reportera | JPG lub PNG | Widoczna twarz en face |
+| Próbka głosu reportera | MP3 | Wypowiedź wyłącznie reportera |
 | Plik wynikowy | Ten sam kontener, kodek i rozdzielczość co plik wejściowy | Eksport po zatwierdzeniu |
 | Transmisja na żywo (wyjście) | Strumień RTSP | Opóźnienie do 15 s |
 
@@ -301,7 +304,7 @@ Wymagania niefunkcjonalne podzielono na produktowe, organizacyjne i zewnętrzne.
 | Detection | id (uuid), material_id (uuid), category (enum: FACE, PLATE, TEXT), track_id (int), frame (int), bbox (int[4]: x, y, w, h), is_reporter (bool), source (enum: auto, editor) |
 | Word | material_id (uuid), text (string, zaszyfrowany), language (enum: PL, EN), speaker_id (int), start_ms (int), end_ms (int), is_personal_data (bool), removed (bool) |
 | Speaker | material_id (uuid), speaker_id (int), is_reporter (bool), voice_modified (bool) |
-| ReporterProfile | id (uuid), name (string), photos (lista plików, zaszyfrowane), face_embedding (float[]) |
+| ReporterProfile | id (uuid), name (string), photos (lista plików, zaszyfrowane), face_embedding (float[]), voice_sample (plik MP3, zaszyfrowany), voice_embedding (float[]) |
 | Statistics | material_id (uuid, puste dla statystyk globalnych), words_removed (int), media_duration_s (int), processing_time_s (int), processed_bytes (int) |
 | AuditLog | id (uuid), user_id (uuid), action (enum: login, upload, approve, export, recovery, delete), material_id (uuid), timestamp (epoch) |
 | Settings | retention_s (int, od 5 do 604 800) |
@@ -336,14 +339,14 @@ Przykładowy wpis mapy wykryć (JSON):
 |---|---|
 | Aktorzy | Redaktor, administrator, osoba uprawniona do odtworzenia, źródło transmisji na żywo (system zewnętrzny), odbiorca strumienia RTSP (system zewnętrzny). |
 | Opis | Celem systemu jest automatyczne usunięcie z nagrań i transmisji na żywo informacji pozwalających zidentyfikować osoby, z wyjątkiem reportera. Redaktor wybiera kategorie anonimizacji, przegląda i poprawia wynik, a następnie zatwierdza go do wydania. Oryginał jest przechowywany w postaci zaszyfrowanej przez czas retencji i może zostać odtworzony przez osobę uprawnioną. |
-| Dane | Pliki MP4, MOV i MP3, strumień transmisji na żywo, zdjęcia reportera, konfiguracja (FACE, TXT, VOICE), konta użytkowników, czas retencji. |
+| Dane | Pliki MP4, MOV i MP3, strumień transmisji na żywo, zdjęcia i próbka głosu reportera, konfiguracja (FACE, TXT, VOICE), konta użytkowników, czas retencji. |
 | Wyzwalacz | Wgranie pliku przez redaktora albo rozpoczęcie transmisji na żywo. |
 | Odpowiedź | Zanonimizowany plik w formacie wejściowym albo strumień RTSP, mapa wykryć do przeglądu, statystyki pliku i globalne. |
-| Uwagi | Skuteczność anonimizacji zależy od modeli rozpoznawania obrazu i mowy (NF-01 do NF-04), dlatego w trybie plikowym wynik zawsze zatwierdza redaktor. |
+| Uwagi | Skuteczność anonimizacji zależy od modeli rozpoznawania obrazu i mowy (NF-01 do NF-04), dlatego w trybie plikowym wynik zawsze zatwierdza redaktor. Transmisja na żywo jest anonimizowana automatycznie, bez udziału redaktora. |
 
 ### 8.2. Szkic interfejsu użytkownika
 
-Ekran główny: lista materiałów po lewej, podgląd z osią czasu wykryć i usuniętych fragmentów dźwięku w środku, konfiguracja kategorii, zdjęcia reportera i lista wykryć po prawej, statystyki pliku na dole.
+Ekran główny: lista materiałów po lewej, podgląd z osią czasu wykryć i usuniętych fragmentów dźwięku w środku, konfiguracja kategorii, profil reportera (zdjęcia i głos) i lista wykryć po prawej, statystyki pliku na dole.
 
 ```text
 +----------------------------------------------------------------------------------------+
@@ -355,7 +358,7 @@ Ekran główny: lista materiałów po lewej, podgląd z osią czasu wykryć i us
 | wywiad_01.mp4        | |  rozmówca         (bez maski)       |   | [x] VOICE           |
 |   do przeglądu       | |       [tablica: #######]            |   |                     |
 | relacja.mov          | +-------------------------------------+   | REPORTER            |
-|   przetwarzanie 45%  |  |<   >   >|        02:14 / 10:00         | [Wgraj zdjęcia]     |
+|   przetwarzanie 45%  |  |<   >   >|        02:14 / 10:00         | [Zdjęcia] [Głos]    |
 | rozmowa.mp3          |  Obraz:  ==|==||===|==  (wykrycia)        |                     |
 |   zatwierdzony       |  Dźwięk: ---x------x--  (usunięte)        | WYKRYCIA            |
 |                      |                                           | Twarz #7    [usuń]  |
@@ -381,7 +384,7 @@ flowchart LR
         UC2(["Wgraj materiał"])
         UC3(["Zwaliduj plik"])
         UC4(["Wybierz kategorie<br/>FACE / TXT / VOICE"])
-        UC5(["Wgraj zdjęcia reportera"])
+        UC5(["Wgraj zdjęcia i próbkę<br/>głosu reportera"])
         UC6(["Anonimizuj materiał"])
         UC7(["Przejrzyj i popraw wynik"])
         UC8(["Zatwierdź i eksportuj"])
@@ -431,7 +434,7 @@ flowchart TB
     P2("2. Szyfrowanie oryginału AES-256")
     P3("3. Dekodowanie obrazu i dźwięku")
     P4("4. Wykrywanie i śledzenie<br/>twarzy, tablic, tekstu")
-    P5("5. Rozpoznawanie reportera")
+    P5("5. Rozpoznawanie reportera<br/>(twarz i głos)")
     P6("6. Rozpoznawanie mowy PL/EN<br/>i podział na mówców")
     P7("7. Wykrywanie wypowiadanych<br/>danych osobowych")
     P8("8. Maskowanie obrazu,<br/>usuwanie słów, zmiana głosu")
@@ -448,9 +451,10 @@ flowchart TB
     P2 -->|"zaszyfrowany oryginał"| D1
     P1 -->|"poprawny plik"| P3
     ZRT -->|"strumień na żywo"| P3
-    RED -->|"zdjęcia reportera"| P5
+    RED -->|"zdjęcia i próbka głosu reportera"| P5
     P3 -->|"klatki"| P4
     P4 -->|"wykrycia twarzy"| P5
+    P6 -->|"głosy mówców"| P5
     P4 -->|"mapa wykryć"| D2
     P5 -->|"oznaczenie reportera"| D2
     P3 -->|"dźwięk"| P6
@@ -494,7 +498,7 @@ sequenceDiagram
     UI->>API: Zweryfikuj kod
     API-->>UI: Sesja aktywna
 
-    R->>UI: Wgraj plik, wybierz FACE, TXT, VOICE, dodaj zdjęcia reportera
+    R->>UI: Wgraj plik, wybierz FACE, TXT, VOICE, wskaż profil reportera (zdjęcia i głos)
     UI->>API: Przesłanie pliku i konfiguracji
     API->>API: Walidacja formatu, kodeka, długości, rozdzielczości
     alt plik niepoprawny
@@ -505,8 +509,8 @@ sequenceDiagram
             API->>OBR: Wykryj i śledź twarze, tablice, tekst, rozpoznaj reportera
             OBR-->>API: Mapa wykryć
         and dźwięk
-            API->>DZW: Rozpoznaj mowę, wykryj dane osobowe, podziel na mówców
-            DZW-->>API: Słowa do usunięcia, mówcy
+            API->>DZW: Rozpoznaj mowę, wykryj dane osobowe, podziel na mówców, rozpoznaj głos reportera
+            DZW-->>API: Słowa do usunięcia, mówcy, głos reportera
         end
         API->>API: Maskowanie, usunięcie słów, zmiana głosu (poza reporterem)
         API-->>UI: Wynik gotowy do przeglądu
@@ -546,7 +550,7 @@ flowchart TB
         K2["K2. Przyjmowanie i przechowywanie<br/>walidacja, szyfrowanie AES-256,<br/>usuwanie po retencji, odtworzenie oryginału"]
         subgraph K3["K3. Silnik anonimizacji"]
             OBR["Moduł obrazu<br/>wykrywanie, śledzenie, reporter, maskowanie"]
-            DZW["Moduł dźwięku<br/>rozpoznawanie mowy, dane osobowe, zmiana głosu"]
+            DZW["Moduł dźwięku<br/>rozpoznawanie mowy, dane osobowe,<br/>głos reportera, zmiana głosu"]
             KOD["Dekodowanie i kodowanie<br/>H.264, H.265, MP3"]
         end
         K4["K4. Transmisja na żywo<br/>odbiór strumienia, bufor do 15 s,<br/>wyjście RTSP"]
@@ -579,9 +583,9 @@ System składa się z interfejsu działającego w przeglądarce oraz z czterech 
 
 **K2. Przyjmowanie i przechowywanie.** Walidacja plików wejściowych, szyfrowanie AES-256, zapis oryginałów i wyników w magazynie, usuwanie danych po upływie retencji i odtwarzanie oryginału dla osoby uprawnionej. Tylko ten komponent ma dostęp do magazynu i kluczy szyfrujących, co ogranicza dostęp do najgłębszej warstwy systemu.
 
-**K3. Silnik anonimizacji.** Moduł obrazu (wykrywanie i śledzenie twarzy, tablic i tekstu, rozpoznawanie reportera, maskowanie), moduł dźwięku (rozpoznawanie mowy, wykrywanie danych osobowych, podział na mówców, zmiana głosu) oraz dekodowanie i kodowanie materiału. Jest to najbardziej krytyczny element systemu: od niego zależy spełnienie wymaganej skuteczności (NF-01 do NF-04) i opóźnienia transmisji (NF-05). Działa na karcie graficznej serwera, a moduły obrazu i dźwięku pracują równolegle.
+**K3. Silnik anonimizacji.** Moduł obrazu (wykrywanie i śledzenie twarzy, tablic i tekstu, rozpoznawanie reportera, maskowanie), moduł dźwięku (rozpoznawanie mowy, wykrywanie danych osobowych, podział na mówców, rozpoznawanie głosu reportera, zmiana głosu) oraz dekodowanie i kodowanie materiału. Jest to najbardziej krytyczny element systemu: od niego zależy spełnienie wymaganej skuteczności (NF-01 do NF-04) i opóźnienia transmisji (NF-05). Działa na karcie graficznej serwera, a moduły obrazu i dźwięku pracują równolegle.
 
-**K4. Transmisja na żywo.** Odbiór strumienia ze źródła, bufor o długości do 15 s, przekazanie fragmentów do K3 i udostępnienie wyniku jako strumienia RTSP. Wydzielenie komponentu pozwala obsługiwać transmisje niezależnie od kolejki plików.
+**K4. Transmisja na żywo.** Odbiór strumienia ze źródła, bufor o długości do 15 s, przekazanie fragmentów do K3 i udostępnienie wyniku jako strumienia RTSP. Wydzielenie komponentu pozwala obsługiwać transmisje niezależnie od kolejki plików. Transmisja jest przetwarzana w pełni automatycznie, z użyciem zapisanego profilu reportera.
 
 **K5. Interfejs webowy.** Wgrywanie plików, konfiguracja kategorii, podgląd i korekta wyniku, statystyki. Interfejs po polsku, zgodny z WCAG 2.1 AA.
 
@@ -599,11 +603,11 @@ Każde wymaganie o priorytecie M ma odpowiadający mu test akceptacyjny. Poniże
 | T-04 | WF-08, NF-02, NF-03 | Przetworzenie zestawu testowego z tablicami rejestracyjnymi i tekstem w kadrze. | Min. 95% tablic i min. 95% napisów zamaskowanych. |
 | T-05 | WF-12, NF-04 | Rozpoznanie mowy w nagraniach testowych PL i EN z transkrypcją wzorcową. | WER nie większy niż 10% dla każdego języka. |
 | T-06 | WF-09 | Materiał, w którym osoba odwraca głowę i przechodzi przez kadr. | Maska ciągła przez cały czas obecności osoby w kadrze. |
-| T-07 | WF-11, WF-14 | Wywiad reportera z dwoma rozmówcami, wgrane zdjęcia reportera. | Twarz i głos reportera bez zmian, twarze rozmówców zamaskowane, ich głosy zmodyfikowane. |
+| T-07 | WF-11, WF-14 | Wywiad reportera z dwoma rozmówcami, w profilu reportera zdjęcia i próbka głosu. | Twarz i głos reportera bez zmian, twarze rozmówców zamaskowane, ich głosy zmodyfikowane. |
 | T-08 | WF-13 | Wypowiedź „Nazywam się Jan Kowalski, mieszkam przy ulicy Długiej 5”. | Usunięte słowa „Jan”, „Kowalski”, „Długiej”, „5”. Statystyka usuniętych słów: 4. |
 | T-09 | WF-06 | Przetworzenie materiału z zaznaczoną wyłącznie kategorią FACE. | Zamaskowane tylko twarze, tekst i dźwięk bez zmian. |
 | T-10 | WF-15, WF-16 | Redaktor dodaje maskę na niewykryty obiekt, usuwa błędną maskę i próbuje eksportu przed zatwierdzeniem. | Eksport zablokowany do zatwierdzenia. Plik wynikowy zawiera poprawki redaktora. |
-| T-11 | WF-17, NF-05 | Transmisja na żywo 4K z osobami i tablicą rejestracyjną w kadrze. | Strumień RTSP odtwarzalny, obiekty zamaskowane, opóźnienie do 15 s. |
+| T-11 | WF-17, WF-18, NF-05 | Transmisja na żywo 4K bez udziału redaktora: reporter rozmawia z przechodniem, w kadrze tablica rejestracyjna. | Strumień RTSP odtwarzalny, twarz przechodnia i tablica zamaskowane, głos przechodnia zmieniony, twarz i głos reportera bez zmian, opóźnienie do 15 s. |
 | T-12 | WF-19, WF-20 | Odtworzenie oryginału przez osobę uprawnioną i próba odtworzenia przez redaktora. | Oryginał identyczny z wgranym (zgodna suma kontrolna SHA-256), wpis w dzienniku. Redaktor otrzymuje odmowę. |
 | T-13 | WF-21 | Ustawienie retencji 5 s i wgranie pliku. | Po upływie 5 s brak danych materiału w systemie, odtworzenie niemożliwe. |
 | T-14 | NF-07, NF-08 | Przegląd dysku serwera i ruchu sieciowego podczas przetwarzania. | Brak niezaszyfrowanych plików materiałów, brak połączeń z hostami zewnętrznymi. |
@@ -620,8 +624,8 @@ Każde wymaganie o priorytecie M ma odpowiadający mu test akceptacyjny. Poniże
 | Skuteczność modeli niższa od wymaganej (małe twarze, profil, ruch, słabe oświetlenie) | Ujawnienie tożsamości w opublikowanym materiale | Zestawy testowe od początku projektu, dobór modeli, przegląd wyniku przez redaktora (WF-15) |
 | Za mała wydajność przy materiale 4K na żywo | Przekroczenie opóźnienia 15 s (NF-05) | Przetwarzanie na karcie graficznej, wykrywanie co kilka klatek ze śledzeniem pomiędzy, wczesne testy wydajności |
 | Niewykryte wypowiadane dane osobowe (obce nazwiska, akcenty, szum) | Publikacja danych osobowych w dźwięku | Reguły dla typowych danych (numery, adresy) obok modelu, podgląd transkrypcji dla redaktora |
-| Brak przeglądu przed emisją w trybie na żywo | Niewykryty obiekt trafia do widzów | Zastrzeżenie przekazane klientowi, podgląd i możliwość przerwania transmisji (WF-18) |
-| Błędne rozpoznanie reportera | Odsłonięcie twarzy osoby postronnej lub zamaskowanie reportera | Wysoki próg dopasowania, kilka zdjęć referencyjnych, przegląd redaktora |
+| Brak przeglądu przed emisją w trybie na żywo | Niewykryty obiekt trafia do widzów | Zastrzeżenie przekazane klientowi, w trybie na żywo niższy próg wykrywania (lepiej zamaskować za dużo niż za mało) |
+| Błędne rozpoznanie reportera (twarz lub głos) | Odsłonięcie twarzy lub głosu osoby postronnej albo anonimizacja reportera | Wysoki próg dopasowania, kilka zdjęć referencyjnych i dłuższa próbka głosu, przegląd redaktora w trybie plikowym |
 | Wyciek oryginałów lub kluczy szyfrujących | Naruszenie RODO, utrata zaufania klienta | AES-256, klucze przechowywane oddzielnie od danych, dostęp tylko przez K2, dziennik zdarzeń |
 | Zbyt krótka retencja ustawiona przez pomyłkę | Utrata oryginału przed odtworzeniem | Ostrzeżenie w interfejsie przy ustawianiu krótkiej retencji |
 | Brak doświadczenia zespołu w przetwarzaniu obrazu, mowy i transmisji | Opóźnienia w realizacji | Gotowe modele i biblioteki, prototyp kluczowych modułów na początku projektu |
@@ -648,7 +652,7 @@ Architektura powinna umożliwić rozwój bez przebudowy. Przewidywane kierunki z
 | Backend | Python 3.12, FastAPI |
 | Frontend | TypeScript, React, biblioteka komponentów zgodnych z WCAG |
 | Obraz | OpenCV, model wykrywania twarzy (np. RetinaFace), model wykrywania tablic i tekstu (np. YOLO, detektor tekstu PaddleOCR), rozpoznawanie twarzy reportera (np. InsightFace) |
-| Dźwięk | Rozpoznawanie mowy PL i EN z czasami słów (np. faster-whisper), podział na mówców (np. pyannote.audio), wykrywanie danych osobowych (np. spaCy dla PL i EN oraz reguły dla numerów i adresów) |
+| Dźwięk | Rozpoznawanie mowy PL i EN z czasami słów (np. faster-whisper), podział na mówców i rozpoznawanie głosu reportera (np. pyannote.audio), wykrywanie danych osobowych (np. spaCy dla PL i EN oraz reguły dla numerów i adresów) |
 | Wideo i transmisja | ffmpeg (H.264, H.265, MP3), serwer RTSP (np. MediaMTX) |
 | Bezpieczeństwo | Biblioteka cryptography (AES-256-GCM), TOTP (np. pyotp) |
 | Baza danych | PostgreSQL |
