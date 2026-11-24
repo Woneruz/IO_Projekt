@@ -69,19 +69,19 @@ Poza zakresem projektu są: montaż i edycja materiałów (cięcie, napisy, efek
 
 ### 1.4. Założenia przyjęte przy interpretacji ustaleń
 
-Część ustaleń z klientem była zwięzła. Tam, gdzie wymagała doprecyzowania, zespół przyjął poniższe interpretacje. Pozycje oznaczone jako **do potwierdzenia** należy potwierdzić z klientem na kolejnym spotkaniu.
+Część ustaleń z klientem była zwięzła. Tam, gdzie wymagała doprecyzowania, zespół przyjął poniższe interpretacje.
 
 | Ustalenie z klientem | Przyjęta interpretacja |
 |---|---|
 | Format aplikacji: dowolny (web, standalone) | Aplikacja webowa uruchamiana w przeglądarce, a przetwarzanie i przechowywanie danych odbywa się na serwerze w infrastrukturze klienta (on-premise). Uzasadnienie: z systemu korzysta kilku redaktorów pracujących na wspólnych materiałach, wykrywanie twarzy i rozpoznawanie mowy wymagają wydajnej karty graficznej tylko na serwerze, a nie na każdym komputerze, a standard WCAG 2.1 dotyczy wprost treści webowych. Decyzja zespołu. |
-| Wynik: plik(i), RTSP | Dla materiału z pliku wynikiem jest zanonimizowany plik w formacie wejściowym. System przyjmuje jeden lub wiele plików naraz (przetwarzanie wsadowe). Dla transmisji na żywo wynikiem jest zanonimizowany strumień RTSP. |
+| Wynik: plik(i), RTSP | Dla materiału z pliku wynikiem jest zanonimizowany plik w formacie wejściowym. System przyjmuje jeden lub wiele plików naraz (przetwarzanie wsadowe). Transmisja na żywo jest przyjmowana i wysyłana jako strumień RTSP. |
 | Transmisja: opóźnienie do 15 s | Czas od odebrania fragmentu obrazu i dźwięku ze źródła do wysłania jego zanonimizowanej wersji w strumieniu wyjściowym nie przekracza 15 s. Transmisja jest anonimizowana w pełni automatycznie: ze względu na opóźnienie redaktor nie przegląda ani nie poprawia jej przed emisją. Kategorie anonimizacji i profil reportera ustawia się przed rozpoczęciem transmisji. |
 | Skuteczność: twarze 97%, tablice rejestracyjne 95%, tekst w kadrze 95%, WER 90% | Odsetek obiektów danego typu wykrytych i zamaskowanych na zestawie testowym. Dla mowy chodzi o skuteczność rozpoznawania co najmniej 90%, czyli wskaźnik WER (odsetek błędnie rozpoznanych słów) nie większy niż 10%. |
 | Tożsamości wszystkich osób poza reporterem | Anonimizowane są wszystkie wykryte osoby z wyjątkiem reportera. |
 | Reporter: identyfikacja za pomocą zdjęć | Przed przetwarzaniem użytkownik wgrywa zdjęcia referencyjne reportera (co najmniej jedno, en face). Twarz pasująca do zdjęć nie jest maskowana. Zdjęcia razem z próbką głosu tworzą profil reportera zapisany w systemie. |
 | Modyfikacja głosu (poza reporterem) | Głos pozostałych mówców jest zmieniany tak, aby nie dało się go rozpoznać. Głos reportera system rozpoznaje automatycznie na podstawie próbki nagrania jego głosu, wgranej wcześniej do profilu reportera. Dzięki temu działa to także w transmisji na żywo, gdzie redaktor nie ma czasu na ręczne wskazanie mówcy, oraz w nagraniach bez obrazu (MP3). |
 | Pseudonimizacja odwracalna | Materiał wynikowy jest zamaskowany nieodwracalnie: z opublikowanego pliku nie da się odtworzyć tożsamości. Odwracalność zapewnia przechowywany osobno, zaszyfrowany oryginał, do którego dostęp ma wyłącznie osoba uprawniona. Spełnia to definicję pseudonimizacji z RODO (art. 4 pkt 5) [3] i jednocześnie wymaganie klienta o odporności na próby odtworzenia tożsamości. |
-| Szyfrowanie danych lokalnie (AES-256) | Wszystkie przechowywane dane (oryginały, wyniki, informacje o wykryciach, zdjęcia reportera) są zaszyfrowane algorytmem AES-256 na serwerze klienta. Dane nie są wysyłane do usług zewnętrznych, więc modele rozpoznawania obrazu i mowy działają lokalnie. **Do potwierdzenia.** |
+| Szyfrowanie danych lokalnie (AES-256) | Wszystkie przechowywane dane (oryginały, wyniki, informacje o wykryciach, zdjęcia reportera) są zaszyfrowane algorytmem AES-256 na serwerze klienta. Dane nie są wysyłane do usług zewnętrznych, więc modele rozpoznawania obrazu i mowy działają lokalnie, na serwerze klienta. |
 | Retencja danych: konfiguracja od 5 s do 7 dni | Czas przechowywania ustawia administrator i dotyczy on wszystkich danych w systemie. Po jego upływie system trwale usuwa oryginały, wyniki, informacje o wykryciach i klucze szyfrujące. Konsekwencja: po upływie retencji odtworzenie oryginału nie jest możliwe. |
 | Języki: polski i angielski | Języki mowy w nagraniach, w których system rozpoznaje wypowiedzi i wykrywa dane osobowe. |
 | Interfejs: w języku polskim | Interfejs jest dostępny wyłącznie po polsku. |
@@ -91,7 +91,7 @@ Część ustaleń z klientem była zwięzła. Tam, gdzie wymagała doprecyzowani
 | Logowanie: 2FA | Logowanie hasłem i jednorazowym kodem z aplikacji uwierzytelniającej (TOTP). |
 | Interfejs GUI: WCAG 2.1 (AA) | Interfejs spełnia kryteria sukcesu poziomów A i AA wytycznych WCAG 2.1 [4]. |
 | Formaty, długość i rozdzielczość | Wideo MP4 lub MOV z kodekiem H.264 lub H.265, audio MP3. Maksymalna długość materiału 30 min, rozdzielczość od 720p (1280×720) do 4K (3840×2160). Plik spoza tego zakresu jest odrzucany z czytelnym komunikatem. |
-| Przegląd wyników przez redaktora (z zamówienia, nie omawiano na spotkaniu) | Przed eksportem redaktor ogląda wynik w podglądzie i może dodać, usunąć lub przesunąć maskę oraz zmienić decyzję o wyciszeniu fragmentu dźwięku. Eksport następuje dopiero po zatwierdzeniu. **Do potwierdzenia.** |
+| Przegląd wyników przez redaktora (z zamówienia, nie omawiano na spotkaniu) | Przed eksportem redaktor ogląda wynik w podglądzie i może dodać, usunąć lub przesunąć maskę oraz zmienić decyzję o wyciszeniu fragmentu dźwięku. Eksport następuje dopiero po zatwierdzeniu. |
 
 ---
 
@@ -194,7 +194,7 @@ Zamówienie klienta nie wystarczało do rozpoczęcia prac. Nie określało wymag
 | WER (Word Error Rate) | Wskaźnik błędów rozpoznawania mowy: (S + D + I) / N, gdzie S, D, I to liczby słów zamienionych, pominiętych i wstawionych, a N to liczba słów w transkrypcji wzorcowej. Skuteczność rozpoznawania = 1 − WER. |
 | Skuteczność wykrywania | Odsetek obiektów danego typu z zestawu testowego, które system wykrył i zamaskował. |
 | Transmisja na żywo | Strumień obrazu i dźwięku przetwarzany na bieżąco w trakcie wydarzenia. |
-| RTSP | Real Time Streaming Protocol, protokół sterowania strumieniami multimedialnymi, przez który system udostępnia zanonimizowaną transmisję. |
+| RTSP | Real Time Streaming Protocol, protokół sterowania strumieniami multimedialnymi, przez który system odbiera transmisję na żywo i udostępnia jej zanonimizowaną wersję. |
 | Opóźnienie transmisji | Czas od odebrania fragmentu strumienia ze źródła do wysłania jego zanonimizowanej wersji. |
 | Retencja | Czas przechowywania danych w systemie, po którego upływie dane są trwale usuwane. |
 | 2FA | Uwierzytelnianie dwuskładnikowe: hasło oraz jednorazowy kod z aplikacji uwierzytelniającej (TOTP). |
@@ -248,7 +248,7 @@ Wymagania systemowe precyzują wymagania użytkownika i są przeznaczone dla arc
 | WF-14 | System dzieli nagranie na mówców, rozpoznaje głos reportera na podstawie próbki z profilu reportera i modyfikuje głos wszystkich pozostałych mówców. Działa to bez udziału redaktora, także w transmisji na żywo. | M | WU-04, WU-05 |
 | WF-15 | Redaktor ogląda wynik w podglądzie z zaznaczonymi maskami i usuniętymi fragmentami dźwięku. Może dodać, usunąć lub przesunąć maskę oraz przywrócić lub usunąć fragment dźwięku. | M | WU-06 |
 | WF-16 | Eksport materiału wynikowego jest możliwy dopiero po zatwierdzeniu przez redaktora. Wynik ma ten sam format, rozdzielczość i kodek co materiał źródłowy. | M | WU-06 |
-| WF-17 | System przyjmuje transmisję na żywo, anonimizuje ją zgodnie z wybranymi kategoriami i udostępnia wynik jako strumień RTSP. | M | WU-07 |
+| WF-17 | System przyjmuje transmisję na żywo jako strumień RTSP, anonimizuje ją zgodnie z wybranymi kategoriami i udostępnia wynik jako strumień RTSP. | M | WU-07 |
 | WF-18 | Transmisja na żywo jest anonimizowana w pełni automatycznie, bez przeglądu przez redaktora. Kategorie anonimizacji i profil reportera wybiera się przed rozpoczęciem transmisji. | M | WU-07 |
 | WF-19 | System przechowuje oryginał osobno od materiału wynikowego, w postaci zaszyfrowanej. | M | WU-08 |
 | WF-20 | Osoba uprawniona do odtworzenia może pobrać oryginał materiału. Każde odtworzenie jest zapisywane w dzienniku zdarzeń (kto, kiedy, który materiał). Użytkownik bez tego uprawnienia nie ma dostępu do oryginałów. | M | WU-08 |
@@ -289,7 +289,7 @@ Wymagania niefunkcjonalne podzielono na produktowe, organizacyjne i zewnętrzne.
 |---|---|---|
 | Plik wideo (wejście) | MP4 lub MOV, kodek H.264 lub H.265 | Do 30 min, od 720p do 4K |
 | Plik audio (wejście) | MP3 | Do 30 min |
-| Transmisja na żywo (wejście) | Strumień RTSP *(założenie, do potwierdzenia)* | Od 720p do 4K |
+| Transmisja na żywo (wejście) | Strumień RTSP | Od 720p do 4K |
 | Zdjęcia referencyjne reportera | JPG lub PNG | Widoczna twarz en face |
 | Próbka głosu reportera | MP3 | Wypowiedź wyłącznie reportera |
 | Plik wynikowy | Ten sam kontener, kodek i rozdzielczość co plik wejściowy | Eksport po zatwierdzeniu |
