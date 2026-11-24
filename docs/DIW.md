@@ -346,27 +346,12 @@ Przykładowy wpis mapy wykryć (JSON):
 
 ### 8.2. Szkic interfejsu użytkownika
 
-Ekran główny: lista materiałów po lewej, podgląd z osią czasu wykryć i usuniętych fragmentów dźwięku w środku, konfiguracja kategorii, profil reportera (zdjęcia i głos) i lista wykryć po prawej, statystyki pliku na dole.
+Ekran główny w trakcie przeglądu wyniku przez redaktora: lista materiałów po lewej, podgląd z zaznaczonymi wykryciami i osią czasu w środku, kategorie anonimizacji, profil reportera (zdjęcia i głos) i lista wykryć po prawej, statystyki pliku pod podglądem.
 
-```text
-+----------------------------------------------------------------------------------------+
-| Anonimizacja nagrań  [Materiały] [Transmisja] [Statystyki] [Admin]                     |
-+----------------------+-------------------------------------------+---------------------+
-| MATERIAŁY            | PODGLĄD                                   | KONFIGURACJA        |
-| [+ Wgraj pliki]      | +-------------------------------------+   | [x] FACE            |
-|                      | |  [####]           reporter          |   | [x] TXT             |
-| wywiad_01.mp4        | |  rozmówca         (bez maski)       |   | [x] VOICE           |
-|   do przeglądu       | |       [tablica: #######]            |   |                     |
-| relacja.mov          | +-------------------------------------+   | REPORTER            |
-|   przetwarzanie 45%  |  |<   >   >|        02:14 / 10:00         | [Zdjęcia] [Głos]    |
-| rozmowa.mp3          |  Obraz:  ==|==||===|==  (wykrycia)        |                     |
-|   zatwierdzony       |  Dźwięk: ---x------x--  (usunięte)        | WYKRYCIA            |
-|                      |                                           | Twarz #7    [usuń]  |
-|                      |  [Dodaj maskę]  [Zatwierdź i eksportuj]   | Tablica #2  [usuń]  |
-+----------------------+-------------------------------------------+---------------------+
-| Statystyki pliku: usunięte słowa: 14 | wydajność: 2,0x | dane: 1,2 GB, 10 min          |
-+----------------------------------------------------------------------------------------+
-```
+![Szkic ekranu głównego](img/szkic-ekranu-glownego.png)
+
+*Rys. 1. Szkic ekranu głównego: przegląd wyniku anonimizacji*
+
 
 ### 8.3. Diagram przypadków użycia
 
