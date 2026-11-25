@@ -1,0 +1,2 @@
+# Zależności backendu (Python 3.12).
+# Do uzupełnienia przy implementacji, na podstawie rozdziału 14 dokumentacji.
