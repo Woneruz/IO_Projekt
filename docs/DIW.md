@@ -121,9 +121,9 @@ Macierz obejmuje kompetencje kluczowe dla tego projektu. Skala: Posiada, Posiada
 
 | Rola | Zakres odpowiedzialności | Osoba |
 |---|---|---|
-| Obraz | Wykrywanie i śledzenie twarzy, tablic rejestracyjnych i tekstu, maskowanie, rozpoznawanie reportera | *do ustalenia* |
-| Dźwięk | Rozpoznawanie mowy, wykrywanie wypowiadanych danych osobowych, rozpoznawanie głosu reportera, modyfikacja głosu | *do ustalenia* |
-| Aplikacja i bezpieczeństwo | Interfejs (WCAG), logowanie 2FA, szyfrowanie, retencja, transmisja na żywo, statystyki | *do ustalenia* |
+| Obraz | Wykrywanie i śledzenie twarzy, tablic rejestracyjnych i tekstu, maskowanie, rozpoznawanie reportera | Joanna Żupnik |
+| Dźwięk | Rozpoznawanie mowy, wykrywanie wypowiadanych danych osobowych, rozpoznawanie głosu reportera, modyfikacja głosu | Arkadiusz Baran |
+| Aplikacja i bezpieczeństwo | Interfejs (WCAG), logowanie 2FA, szyfrowanie, retencja, transmisja na żywo, statystyki | Marcel Kuźma |
 | Testy i dokumentacja | Zestawy testowe, testy akceptacyjne, diagramy UML | *wspólnie* |
 
 ---
